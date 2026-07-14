@@ -54,13 +54,35 @@ const iconList = {
 };
 
 class MyIcon extends HTMLElement {
+  // 1. 告訴瀏覽器，我們要監聽 'name' 屬性的變化
+  static get observedAttributes() {
+    return ['name'];
+  }
+
+  // 2. 當 HTML 上的 name 被修改時，這個 function 會自動被觸發
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this.render(); // 屬性改變了，重新畫一次圖示
+    }
+  }
+  
   connectedCallback() {
+    this.render();
+  }
+
+  render() {
     const name = this.getAttribute('name') || 'bookmark';
     const icon = iconList[name];
 
-    if (!icon) return;
-    
-    this.innerHTML = `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="${icon.viewBox}" aria-hidden="true"><path d="${icon.path}"/>
-      </svg>`;}}
+    if (!icon) {
+      this.innerHTML = ''; 
+      return;
+    }
+
+    this.innerHTML = `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="${icon.viewBox}" aria-hidden="true">
+        <path d="${icon.path}"/>
+      </svg>`;
+  }
+}
 
 customElements.define('f-a', MyIcon);
