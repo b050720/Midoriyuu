@@ -61,7 +61,6 @@ function createSVG(viewBox, path) {
     svg.setAttribute("viewBox", viewBox);
     svg.setAttribute("width", "100%");
     svg.setAttribute("height", "100%");
-    svg.setAttribute("fill", "currentColor");
 
     const p = document.createElementNS(svgNS, "path");
     p.setAttribute("d", path);
