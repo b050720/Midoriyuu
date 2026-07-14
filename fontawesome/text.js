@@ -60,7 +60,7 @@ class MyIcon extends HTMLElement {
 
     if (!icon) return;
     
-    this.innerHTML = `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="${icon.viewBox}" aria-hidden="true"><path d="${path}"/>
+    this.innerHTML = `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="${icon.viewBox}" aria-hidden="true"><path d="${icon.path}"/>
       </svg>`;}}
 
 customElements.define('f-a', MyIcon);
