@@ -68,76 +68,77 @@ const FA_ICONS = {
  */
 class FontAwesomeIcon extends HTMLElement {
   static get observedAttributes() {
-    return ['name', 'size', 'title']; // 監聽屬性，方便未來動態修改
+    return ['name', 'size', 'title'];
   }
 
   constructor() {
     super();
-    // 使用命名空間建立 SVG 所需元件，防堵 DOM 渲染問題
-    this.svgNS = "http://www.w3.org/2000/svg";
+    this.svgNS = "http://w3.org";
+    
+    // 💡 核心修正：開啟 Shadow DOM (mode: 'open' 代表外部仍可用 JS 讀取，但防篡改)
+    this.attachShadow({ mode: 'open' });
   }
 
   connectedCallback() {
-    // 優化：確保自定義標籤具備 block 或 inline-block 特性，才不會擠壓內部 SVG
-    if (this.style.display === '' || this.style.display === 'inline') {
-      this.style.display = 'inline-block';
-    }
+    // 預設樣式優化，直接加在 shadow 宿主上
+    this.style.display = 'inline-block';
     this.render();
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue !== newValue && this.ownerDocument) {
+    if (oldValue !== newValue && this.shadowRoot) {
       this.render();
     }
   }
 
   render() {
-    // 1. 清空舊的內容
-    this.textContent = '';
+    // 💡 修正：清空的是影子 root，而不是外層 DOM
+    this.shadowRoot.innerHTML = '';
 
     const iconName = this.getAttribute('name');
     const size = this.getAttribute('size');
     const titleText = this.getAttribute('title');
 
-    // 2. 防呆機制：若未設定名稱或圖示庫中不存在，則直接輸出空內容，不噴錯
     if (!iconName || !FA_ICONS[iconName]) {
       return;
     }
 
     const iconData = FA_ICONS[iconName];
 
-    // 3. 使用標準 DOM API 建立 SVG 節點
     const svg = document.createElementNS(this.svgNS, 'svg');
     svg.setAttribute('viewBox', iconData.viewBox);
     svg.setAttribute('aria-hidden', 'true');
-    
-    // 預留未來擴充性：若標籤上有設定 size="24"，則改寫寬高，否則套用 CSS 設定
-   if (size) {
-      // 如果有給 size（例如 size="24"），我們同步控制外殼 <f-a> 與內部 <svg>
+    svg.setAttribute('fill', 'currentColor');
+    svg.style.maxWidth = '100%';
+    svg.style.maxHeight = '100%';
+
+    // 💡 為 Shadow DOM 內建基礎樣式，避免外部擠壓變形
+    const style = document.createElement('style');
+    style.textContent = `
+      svg { width: 100%; height: 100%; vertical-align: -0.125em; }
+    `;
+    this.shadowRoot.appendChild(style);
+
+    if (size) {
       this.style.width = `${size}px`;
       this.style.height = `${size}px`;
       svg.setAttribute('width', size);
       svg.setAttribute('height', size);
-    } else {
-      // 如果沒給 size，讓它預設填滿外部 CSS 給 <f-a> 的寬高
-      svg.style.width = '100%';
-      svg.style.height = '100%';
     }
 
-    // 預留未來擴充性：若有設定 title="收藏"，加入對應的 <title> 標籤以利 SEO & 無障礙閱讀
     if (titleText) {
       const title = document.createElementNS(this.svgNS, 'title');
       title.textContent = titleText;
       svg.appendChild(title);
     }
 
-    // 4. 建立 path 節點並填入路徑
     const path = document.createElementNS(this.svgNS, 'path');
     path.setAttribute('d', iconData.path);
     
-    // 5. 組合並插入 DOM
     svg.appendChild(path);
-    this.appendChild(svg);
+    
+    // 💡 修正：將 SVG 塞入影子根節點，與外界徹底隔絕
+    this.shadowRoot.appendChild(svg);
   }
 }
 
