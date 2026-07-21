@@ -34,12 +34,12 @@ containers.forEach(function(container) {
 
   // 【規則 1：原創作品系列】
   if ((targetLabel = findLabel("原創新詩")) || (targetLabel = findLabel("原創短篇"))) {
-    contentEl.innerHTML = "更多原創作品&#65306;<a class='label-dynamic-link' href='" + targetLabel.url + "' title='綠夕的原創作品｜" + targetLabel.name + " @ 緑の庭'>&#12304;" + targetLabel.name + "&#12305;</a>";
+    contentEl.innerHTML = "更多文字創作&#65306;<a class='label-dynamic-link' href='" + targetLabel.url + "' title='綠夕的文字創作｜" + targetLabel.name + " @ 緑の庭'>&#12304;" + targetLabel.name + "&#12305;</a>";
     container.style.display = ""; // 顯示區塊
   } 
   // 【規則 2：瑪奇服裝系列】
   else if ((targetLabel = findLabel("充滿時尚品味的"))) {
-    contentEl.innerHTML = "更多瑪奇服裝&#65306;<a href='https://midoriyuu.blogspot.com/p/craft.html' title='綠夕的瑪奇服裝收集冊 @ 緑の庭'>&#12304;綠夕的瑪奇服裝收集冊&#12305;</a>";
+    contentEl.innerHTML = "更多瑪奇日常&#65306;<a href='https://midoriyuu.blogspot.com/p/craft.html' title='綠夕的瑪奇服裝收集冊 @ 緑の庭'>&#12304;充滿時尚品味的&#12305;</a>";
     container.style.display = "";
   } 
   // 【規則 3：鉤針作品系列】
@@ -49,7 +49,7 @@ containers.forEach(function(container) {
   } 
   // 【規則 4：歌詞翻譯系列】
   else if ((targetLabel = findLabel("歌詞翻譯"))) {
-    contentEl.innerHTML = "更多歌詞翻譯&#65306;<a class='label-dynamic-link' href='" + targetLabel.url + "' title='綠夕的歌詞翻譯｜" + targetLabel.name + " @ 緑の庭'>&#12304;" + targetLabel.name + "&#12305;</a>";
+    contentEl.innerHTML = "更多翻譯作品&#65306;<a class='label-dynamic-link' href='" + targetLabel.url + "' title='綠夕的文字創作｜" + targetLabel.name + " @ 緑の庭'>&#12304;" + targetLabel.name + "&#12305;</a>";
     container.style.display = "";
   }
 });
@@ -89,7 +89,6 @@ containers.forEach(function(container) {
       goTopBtn.style.display = "none";
     }
   });
-BloggerPostTitle(".blog-pager-right a", ".blog-pager-older-title");
 
   /* =======================================================
    * 功能 4：Fancybox 燈箱觸發設定
