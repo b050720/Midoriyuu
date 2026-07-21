@@ -3,41 +3,54 @@
  */
 document.addEventListener("DOMContentLoaded", function() {
 
- /* =======================================================
- * 功能 1：處理更多作品標籤文字
+/* =======================================================
+ * 功能 1：處理更多作品標籤文字（支援多標籤比對）
  * ======================================================= */
 var containers = document.querySelectorAll(".moreWorks");
 
 containers.forEach(function(container) {
-  var nameEl = container.querySelector(".label-name");
-  var strongEl = container.querySelector("strong");
-  var dynamicLinkEl = container.querySelector(".label-dynamic-link");
+  var contentEl = container.querySelector(".moreWorks-content");
+  var labelNodes = container.querySelectorAll(".label-item");
+  if (!contentEl || labelNodes.length === 0) return;
 
-  if (!nameEl || !strongEl || !dynamicLinkEl) return;
+  // 1. 將這篇文章的所有標籤轉成陣列物件
+  var labels = [];
+  labelNodes.forEach(function(node) {
+    labels.push({
+      name: node.getAttribute("data-name") || "",
+      url: node.getAttribute("data-url") || ""
+    });
+  });
 
-  // 直接取得 HTML 裡面的標籤名稱文字
-  var labelName = nameEl.textContent.trim();
-  var labelUrl = dynamicLinkEl.getAttribute("href");
-
-  // 1. 原創作品系列
-  if (labelName.indexOf("原創新詩") !== -1 || labelName.indexOf("原創短篇") !== -1) {
-    strongEl.innerHTML = "更多原創作品&#65306;<a class='label-dynamic-link' href='" + labelUrl + "' title='綠夕的原創作品｜" + labelName + " @ 緑の庭'>&#12304;" + labelName + "&#12305;</a>";
-  } 
-  // 2. 瑪奇服裝系列
-  else if (labelName.indexOf("充滿時尚品味的") !== -1) {
-    strongEl.innerHTML = "更多瑪奇服裝&#65306;<a href='https://midoriyuu.blogspot.com/p/craft.html' title='綠夕的瑪奇服裝收集冊 @ 緑の庭'>&#12304;綠夕的瑪奇服裝收集冊&#12305;</a>";
-  } 
-  // 3. 鉤針作品系列
-  else if (labelName.indexOf("製作紀錄") !== -1) {
-    strongEl.innerHTML = "更多鉤針作品&#65306;<a href='https://midoriyuu.blogspot.com/p/craft.html' title='綠夕的手作工坊｜鉤針作品總整理 @ 緑の庭'>&#12304;全部作品&#12305;</a>";
-  } 
-  // 4. 歌詞翻譯系列
-  else if (labelName.indexOf("歌詞翻譯") !== -1) {
-    strongEl.innerHTML = "更多歌詞翻譯&#65306;<a class='label-dynamic-link' href='" + labelUrl + "' title='綠夕的歌詞翻譯｜" + labelName + " @ 緑の庭'>&#12304;" + labelName + "&#12305;</a>";
+  // 2. 輔助函式：用來尋找第一個包含特定關鍵字的標籤
+  function findLabel(keyword) {
+    return labels.find(function(item) {
+      return item.name.indexOf(keyword) !== -1;
+    });
   }
-  // 5. 其他未特別指定的標籤（預設樣式）
-  else {
-    dynamicLinkEl.setAttribute("title", "綠夕的" + labelName + " @ 緑の庭");
+
+  // 3. 依照優先順序比對所有標籤
+  var targetLabel = null;
+
+  // 【規則 1：原創作品系列】
+  if ((targetLabel = findLabel("原創新詩")) || (targetLabel = findLabel("原創短篇"))) {
+    contentEl.innerHTML = "更多原創作品&#65306;<a class='label-dynamic-link' href='" + targetLabel.url + "' title='綠夕的原創作品｜" + targetLabel.name + " @ 緑の庭'>&#12304;" + targetLabel.name + "&#12305;</a>";
+    container.style.display = ""; // 顯示區塊
+  } 
+  // 【規則 2：瑪奇服裝系列】
+  else if ((targetLabel = findLabel("充滿時尚品味的"))) {
+    contentEl.innerHTML = "更多瑪奇服裝&#65306;<a href='https://midoriyuu.blogspot.com/p/craft.html' title='綠夕的瑪奇服裝收集冊 @ 緑の庭'>&#12304;綠夕的瑪奇服裝收集冊&#12305;</a>";
+    container.style.display = "";
+  } 
+  // 【規則 3：鉤針作品系列】
+  else if ((targetLabel = findLabel("製作紀錄"))) {
+    contentEl.innerHTML = "更多鉤針作品&#65306;<a href='https://midoriyuu.blogspot.com/p/craft.html' title='綠夕的手作工坊｜鉤針作品總整理 @ 緑の庭'>&#12304;全部作品&#12305;</a>";
+    container.style.display = "";
+  } 
+  // 【規則 4：歌詞翻譯系列】
+  else if ((targetLabel = findLabel("歌詞翻譯"))) {
+    contentEl.innerHTML = "更多歌詞翻譯&#65306;<a class='label-dynamic-link' href='" + targetLabel.url + "' title='綠夕的歌詞翻譯｜" + targetLabel.name + " @ 緑の庭'>&#12304;" + targetLabel.name + "&#12305;</a>";
+    container.style.display = "";
   }
 });
 
@@ -48,7 +61,7 @@ containers.forEach(function(container) {
   document.querySelector('.sidebar-back')?.setAttribute('aria-label', '關閉側邊欄');
 
   /* =======================================================
-   * 功能 5：回到頂端功能 (原生 JS版)
+   * 功能 3：回到頂端功能 (原生 JS版)
    * ======================================================= */
   var imgUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh3FWDPR2RQAqQGt9umu0yhATNQDoESwxiGIXz6ocT6hopC9NhxRksna7oz6axJPgIFx4IvtKWIncy575PgtsVld7L5thQ1xCB8hgIL5hme03PfqKTQX58erzZkonp0SEGE4DYtwDt1rA/w40-rw/gotop.png";
   
@@ -79,7 +92,7 @@ containers.forEach(function(container) {
 BloggerPostTitle(".blog-pager-right a", ".blog-pager-older-title");
 
   /* =======================================================
-   * 功能 6：Fancybox 燈箱觸發設定
+   * 功能 4：Fancybox 燈箱觸發設定
    * ======================================================= */
   Fancybox.bind('[data-fancybox]', {
     Carousel: {
@@ -97,7 +110,7 @@ BloggerPostTitle(".blog-pager-right a", ".blog-pager-older-title");
   });
  
   /* =======================================================
-   * 功能 8：監聽留言區並修改 title 屬性
+   * 功能 5：監聽留言區並修改 title 屬性
    * ======================================================= */
   var observer = new MutationObserver(function(mutations, obs) {
     var commentLink = document.querySelector("#comments .footer a[onclick*='bloggerPopup']");
