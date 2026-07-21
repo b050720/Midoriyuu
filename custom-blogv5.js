@@ -3,38 +3,36 @@
  */
 document.addEventListener("DOMContentLoaded", function() {
 
-  /* =======================================================
-   * 功能 1：處理更多作品標籤文字
-   * ======================================================= */
-  var containers = document.querySelectorAll(".moreWorks");
-  containers.forEach(function(container) {
-    var rawText = container.getAttribute("data-raw");
-    if (rawText) {
-      if (rawText.indexOf("製作紀錄") !== -1) {
-        var strongEl = container.querySelector("strong");
-        if (strongEl) {
-          strongEl.innerHTML = "更多鉤針作品&#65306;<a href='https://midoriyuu.blogspot.com/p/craft.html' title='綠夕的手作工坊｜鉤針作品總整理 @ 緑の庭'>&#12304;全部作品&#12305;</a>";
-        }
-      } 
-      else if (rawText.indexOf("-") > 0) {
-        var parts = rawText.split("-");
-        var firstPart = parts[0];
-        var lastPart = parts[parts.length - 1];
-        
-        var firstPartEl = container.querySelector(".label-first-part");
-        var lastPartEl = container.querySelector(".label-last-part");
-        var dynamicLinkEl = container.querySelector(".label-dynamic-link");
-        
-        if (firstPartEl) firstPartEl.innerHTML = firstPart;
-        if (lastPartEl) lastPartEl.innerHTML = lastPart;
-        
-        if (dynamicLinkEl) {
-          var customTitle = "綠夕的" + firstPart + "｜" + lastPart + " @ 緑の庭";
-          dynamicLinkEl.setAttribute("title", customTitle);
-        }
-      }
-    }
-  });
+
+ * 功能 1：處理更多作品標籤文字
+ * ======================================================= */
+var containers = document.querySelectorAll(".moreWorks");
+
+containers.forEach(function(container) {
+  var rawText = container.getAttribute("data-raw");
+  if (!rawText) return;
+
+  var strongEl = container.querySelector("strong");
+  if (!strongEl) return;
+
+  // 1. 鉤針作品 (關鍵字: 製作紀錄)
+  if (rawText.indexOf("製作紀錄") !== -1) {
+    strongEl.innerHTML = "更多鉤針作品&#65306;<a href='https://midoriyuu.blogspot.com/p/craft.html' title='綠夕的手作工坊｜鉤針作品總整理 @ 緑の庭'>&#12304;全部作品&#12305;</a>";
+  } 
+  // 2. 瑪奇服裝 (關鍵字: 充滿時尚品味的)
+  else if (rawText.indexOf("充滿時尚品味的") !== -1) {
+    strongEl.innerHTML = "更多瑪奇服裝&#65306;<a href='https://midoriyuu.blogspot.com/p/mabinogi-fashion.html' title='綠夕的瑪奇服裝收集冊 @ 緑の庭'>&#12304;綠夕的瑪奇服裝收集冊&#12305;</a>";
+  } 
+  // 3. 原創作品 (關鍵字: 原創新詩、原創短篇)
+  else if (rawText.indexOf("原創新詩") !== -1 || rawText.indexOf("原創短篇") !== -1) {
+    var subCategory = rawText.indexOf("原創新詩") !== -1 ? "原創新詩" : "原創短篇";
+    strongEl.innerHTML = "更多原創作品&#65306;<a href='https://midoriyuu.blogspot.com/p/creative.html' title='綠夕的原創作品 ｜ " + subCategory + " @ 緑の庭'>&#12304;" + subCategory + "&#12305;</a>";
+  } 
+  // 4. 歌詞翻譯 (關鍵字: 歌詞翻譯)
+  else if (rawText.indexOf("歌詞翻譯") !== -1) {
+    strongEl.innerHTML = "更多歌詞翻譯&#65306;<a href='https://midoriyuu.blogspot.com/p/lyrics.html' title='綠夕的歌詞翻譯整理 @ 緑の庭'>&#12304;歌詞翻譯&#12305;</a>";
+  }
+});
 
   /* =======================================================
    * 功能 2：修正按鈕的無障礙標籤 (aria-label)
@@ -71,41 +69,7 @@ document.addEventListener("DOMContentLoaded", function() {
       goTopBtn.style.display = "none";
     }
   });
-
-  /* =======================================================
-   * 功能 7：較新/較舊文章標題 Ajax 抓取
-   * ======================================================= */
-  function fetchBloggerPostTitle(linkSelector, targetSelector) {
-    var postLink = $(linkSelector).attr("href");
-    
-    if (postLink) {
-      $.ajax({
-        url: postLink,
-        type: 'GET',
-        dataType: 'text', // 強制當純文字下載，防止 Lighthouse 抓到重複的 preconnect
-        success: function(htmlString) {
-          // 用 Regex 抓取包含 post-title 的標籤內部文字
-          var match = htmlString.match(/<[^>]*class=[^>]*post-title[^>]*>([\s\S]*?)<\/h/);
-          if (match && match[1]) {
-            var pureText = match[1].replace(/<[^>]*>/g, '').trim();
-            if (pureText) {
-              // 使用 .html() 自動解碼 HTML 實體編碼
-              $(targetSelector).html(pureText);
-            }
-          }
-        },
-        error: function() {
-          $(targetSelector).html(""); // 失敗時清空提示
-        }
-      });
-    } else {
-      $(targetSelector).html(""); // 如果沒有上一篇或下一篇，就清空文字
-    }
-  }
-
-  // 同時執行「較新文章」與「較舊文章」的標題抓取
-  fetchBloggerPostTitle(".blog-pager-left a", ".blog-pager-newer-title");
-  fetchBloggerPostTitle(".blog-pager-right a", ".blog-pager-older-title");
+BloggerPostTitle(".blog-pager-right a", ".blog-pager-older-title");
 
   /* =======================================================
    * 功能 6：Fancybox 燈箱觸發設定
