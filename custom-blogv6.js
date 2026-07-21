@@ -3,34 +3,41 @@
  */
 document.addEventListener("DOMContentLoaded", function() {
 
-
+ /* =======================================================
  * 功能 1：處理更多作品標籤文字
  * ======================================================= */
 var containers = document.querySelectorAll(".moreWorks");
 
 containers.forEach(function(container) {
-  var rawText = container.getAttribute("data-raw");
-  if (!rawText) return;
-
+  var nameEl = container.querySelector(".label-name");
   var strongEl = container.querySelector("strong");
-  if (!strongEl) return;
+  var dynamicLinkEl = container.querySelector(".label-dynamic-link");
 
-  // 1. 鉤針作品 (關鍵字: 製作紀錄)
-  if (rawText.indexOf("製作紀錄") !== -1) {
+  if (!nameEl || !strongEl || !dynamicLinkEl) return;
+
+  // 直接取得 HTML 裡面的標籤名稱文字
+  var labelName = nameEl.textContent.trim();
+  var labelUrl = dynamicLinkEl.getAttribute("href");
+
+  // 1. 原創作品系列
+  if (labelName.indexOf("原創新詩") !== -1 || labelName.indexOf("原創短篇") !== -1) {
+    strongEl.innerHTML = "更多原創作品&#65306;<a class='label-dynamic-link' href='" + labelUrl + "' title='綠夕的原創作品｜" + labelName + " @ 緑の庭'>&#12304;" + labelName + "&#12305;</a>";
+  } 
+  // 2. 瑪奇服裝系列
+  else if (labelName.indexOf("充滿時尚品味的") !== -1) {
+    strongEl.innerHTML = "更多瑪奇服裝&#65306;<a href='https://midoriyuu.blogspot.com/p/craft.html' title='綠夕的瑪奇服裝收集冊 @ 緑の庭'>&#12304;綠夕的瑪奇服裝收集冊&#12305;</a>";
+  } 
+  // 3. 鉤針作品系列
+  else if (labelName.indexOf("製作紀錄") !== -1) {
     strongEl.innerHTML = "更多鉤針作品&#65306;<a href='https://midoriyuu.blogspot.com/p/craft.html' title='綠夕的手作工坊｜鉤針作品總整理 @ 緑の庭'>&#12304;全部作品&#12305;</a>";
   } 
-  // 2. 瑪奇服裝 (關鍵字: 充滿時尚品味的)
-  else if (rawText.indexOf("充滿時尚品味的") !== -1) {
-    strongEl.innerHTML = "更多瑪奇服裝&#65306;<a href='https://midoriyuu.blogspot.com/p/mabinogi-fashion.html' title='綠夕的瑪奇服裝收集冊 @ 緑の庭'>&#12304;綠夕的瑪奇服裝收集冊&#12305;</a>";
-  } 
-  // 3. 原創作品 (關鍵字: 原創新詩、原創短篇)
-  else if (rawText.indexOf("原創新詩") !== -1 || rawText.indexOf("原創短篇") !== -1) {
-    var subCategory = rawText.indexOf("原創新詩") !== -1 ? "原創新詩" : "原創短篇";
-    strongEl.innerHTML = "更多原創作品&#65306;<a href='https://midoriyuu.blogspot.com/p/creative.html' title='綠夕的原創作品 ｜ " + subCategory + " @ 緑の庭'>&#12304;" + subCategory + "&#12305;</a>";
-  } 
-  // 4. 歌詞翻譯 (關鍵字: 歌詞翻譯)
-  else if (rawText.indexOf("歌詞翻譯") !== -1) {
-    strongEl.innerHTML = "更多歌詞翻譯&#65306;<a href='https://midoriyuu.blogspot.com/p/lyrics.html' title='綠夕的歌詞翻譯整理 @ 緑の庭'>&#12304;歌詞翻譯&#12305;</a>";
+  // 4. 歌詞翻譯系列
+  else if (labelName.indexOf("歌詞翻譯") !== -1) {
+    strongEl.innerHTML = "更多歌詞翻譯&#65306;<a class='label-dynamic-link' href='" + labelUrl + "' title='綠夕的歌詞翻譯｜" + labelName + " @ 緑の庭'>&#12304;" + labelName + "&#12305;</a>";
+  }
+  // 5. 其他未特別指定的標籤（預設樣式）
+  else {
+    dynamicLinkEl.setAttribute("title", "綠夕的" + labelName + " @ 緑の庭");
   }
 });
 
