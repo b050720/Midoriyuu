@@ -19,8 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
     };
   });
 
-  // 1. 【系列資料表 (Series Config)】
-  // 條件：必須有 requiredLabel 標籤，且標題包含 keyword
+  // 1. 【系列 Config】
   var seriesConfig = [
     {
       requiredLabel: "製作紀錄",
@@ -52,38 +51,37 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   ];
 
-  // 2. 【大分類資料表 (Category Config)】
-  // 條件：只要命中 targetLabel 關鍵字即可
+  // 2. 【大分類 Config】
   var categoryConfig = [
     {
       targetLabel: "原創新詩",
-      prefix: "更多文字創作",
+      prefix: "文字創作",
       titlePrefix: "綠夕的文字創作｜",
-      useLabelUrl: true // 使用標籤原本的 URL
+      useLabelUrl: true
     },
     {
       targetLabel: "原創短篇",
-      prefix: "更多文字創作",
+      prefix: "文字創作",
       titlePrefix: "綠夕的文字創作｜",
       useLabelUrl: true
     },
     {
       targetLabel: "充滿時尚品味的",
-      prefix: "更多瑪奇日常",
+      prefix: "瑪奇日常",
       fixedName: "充滿時尚品味的",
       fixedUrl: "https://midoriyuu.blogspot.com/p/craft.html",
       fixedTitle: "綠夕的瑪奇服裝收集冊 @ 緑の庭"
     },
     {
       targetLabel: "製作紀錄",
-      prefix: "更多鉤針作品",
+      prefix: "鉤針作品",
       fixedName: "全部作品",
       fixedUrl: "https://midoriyuu.blogspot.com/p/craft.html",
       fixedTitle: "綠夕的手作工坊｜鉤針作品總整理 @ 緑の庭"
     },
     {
       targetLabel: "歌詞翻譯",
-      prefix: "更多翻譯作品",
+      prefix: "翻譯作品",
       titlePrefix: "綠夕的文字創作｜",
       useLabelUrl: true
     }
@@ -91,37 +89,38 @@ document.addEventListener("DOMContentLoaded", function() {
 
   var htmlItems = [];
 
-  // ─── 比對 1：系列 Router (Series) ───
+  // ─── 比對 1：系列 Router ───
   seriesConfig.forEach(function(item) {
     var hasLabel = labels.some(function(l) { return l.name === item.requiredLabel; });
     var hasKeyword = postTitle.indexOf(item.keyword) !== -1;
 
     if (hasLabel && hasKeyword) {
       htmlItems.push(
-        "<li>更多" + item.name + "作品：<a href='" + item.url + "' title='" + item.title + "'>【" + item.name + "】</a></li>"
+        "<li class='moreWorks'><f-a name='bookmark'></f-a>更多" + item.name + "作品&#65306;<a href='" + item.url + "' title='" + item.title + "'>&#12304;" + item.name + "&#12305;</a></li>"
       );
     }
   });
 
-  // ─── 比對 2：分類 Router (Category) ───
+  // ─── 比對 2：分類 Router ───
   categoryConfig.some(function(item) {
     var matchedLabel = labels.find(function(l) { return l.name.indexOf(item.targetLabel) !== -1; });
     if (matchedLabel) {
       var linkName = item.fixedName || matchedLabel.name;
       var linkUrl = item.useLabelUrl ? matchedLabel.url : item.fixedUrl;
       var linkTitle = item.fixedTitle || (item.titlePrefix + matchedLabel.name + " @ 緑の庭");
+      var firstPartText = item.prefix || matchedLabel.name;
 
       htmlItems.push(
-        "<li>" + item.prefix + "：<a href='" + linkUrl + "' title='" + linkTitle + "'>【" + linkName + "】</a></li>"
+        "<li class='moreWorks'><f-a name='bookmark'></f-a>更多" + firstPartText + "&#65306;<a href='" + linkUrl + "' title='" + linkTitle + "'>&#12304;" + linkName + "&#12305;</a></li>"
       );
-      return true; // 命中第一個分類即停止，避免重複輸出
+      return true;
     }
   });
 
   // ─── 渲染結果 ───
   if (htmlItems.length > 0) {
     listEl.innerHTML = htmlItems.join("");
-    boxEl.style.display = "block"; // 顯示卡片
+    boxEl.style.display = "block";
   }
 
   /* =======================================================
