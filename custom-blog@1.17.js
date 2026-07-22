@@ -2,100 +2,100 @@
  * 綠夕的工坊 - 部落格客製化功能
  */
 document.addEventListener("DOMContentLoaded", function() {
-
+  
 /* =======================================================
  * 功能 1：處理更多作品標籤文字（支援多標籤比對）
  * ======================================================= */
-  var boxEl = document.getElementById("moreWorks");
-  var listEl = document.getElementById("moreWorksList");
-  var labelNodes = document.querySelectorAll("#postLabelsData .label-item");
-  if (!boxEl || !listEl || labelNodes.length === 0) return;
+var boxEl = document.getElementById("moreWorks");
+var listEl = document.getElementById("moreWorksList");
+var labelNodes = document.querySelectorAll("#postLabelsData .label-item");
+if (!boxEl || !listEl || labelNodes.length === 0) return;
 
-  var postTitle = boxEl.getAttribute("data-title") || "";
-  var labels = Array.from(labelNodes).map(function(node) {
-    return {
-      name: node.getAttribute("data-name") || "",
-      url: node.getAttribute("data-url") || ""
-    };
-  });
+var postTitle = boxEl.getAttribute("data-title") || "";
+var labels = Array.from(labelNodes).map(function(node) {
+  return {
+    name: node.getAttribute("data-name") || "",
+    url: node.getAttribute("data-url") || ""
+  };
+});
 
-  // 1. 【系列 Config】
-  var seriesConfig = [
-    {
-      requiredLabel: "製作紀錄",
-      keyword: "英雄聯盟",
-      name: "英雄聯盟",
-      url: "https://midoriyuu.blogspot.com/p/craft.html",
-      title: "綠夕的手作工坊｜英雄聯盟系列作品 @ 緑の庭"
-    },
-    {
-      requiredLabel: "製作紀錄",
-      keyword: "空洞騎士",
-      name: "空洞騎士",
-      url: "https://midoriyuu.blogspot.com/p/craft.html",
-      title: "綠夕的手作工坊｜空洞騎士系列作品 @ 緑の庭"
-    },
-  ];
+// 1. 【系列 Config】
+var seriesConfig = [
+  {
+    requiredLabel: "製作紀錄",
+    keyword: "英雄聯盟",
+    name: "英雄聯盟",
+    url: "https://midoriyuu.blogspot.com/p/craft.html",
+    title: "綠夕的手作工坊｜英雄聯盟系列作品 @ 緑の庭"
+  },
+  {
+    requiredLabel: "製作紀錄",
+    keyword: "空洞騎士",
+    name: "空洞騎士",
+    url: "https://midoriyuu.blogspot.com/p/craft.html",
+    title: "綠夕的手作工坊｜空洞騎士系列作品 @ 緑の庭"
+  },
+];
 
-  // 2. 【大分類 Config】
-  var categoryConfig = [
-    {
-      targetLabel: "原創新詩",
-      prefix: "文字創作",
-      titlePrefix: "綠夕的文字創作｜",
-      useLabelUrl: true
-    },
-    {
-      targetLabel: "充滿時尚品味的",
-      prefix: "瑪奇日常",
-      fixedName: "充滿時尚品味的",
-      fixedUrl: "https://midoriyuu.blogspot.com/p/craft.html",
-      fixedTitle: "綠夕的瑪奇服裝收集冊 @ 緑の庭"
-    },
-    {
-      targetLabel: "製作紀錄",
-      prefix: "鉤針作品",
-      fixedName: "全部作品",
-      fixedUrl: "https://midoriyuu.blogspot.com/p/craft.html",
-      fixedTitle: "綠夕的手作工坊｜鉤針作品總整理 @ 緑の庭"
-    },
-  ];
+// 2. 【大分類 Config】
+var categoryConfig = [
+  {
+    targetLabel: "原創新詩",
+    prefix: "文字創作",
+    titlePrefix: "綠夕的文字創作｜",
+    useLabelUrl: true
+  },
+  {
+    targetLabel: "充滿時尚品味的",
+    prefix: "瑪奇日常",
+    fixedName: "充滿時尚品味的",
+    fixedUrl: "https://midoriyuu.blogspot.com/p/craft.html",
+    fixedTitle: "綠夕的瑪奇服裝收集冊 @ 緑の庭"
+  },
+  {
+    targetLabel: "製作紀錄",
+    prefix: "鉤針作品",
+    fixedName: "全部作品",
+    fixedUrl: "https://midoriyuu.blogspot.com/p/craft.html",
+    fixedTitle: "綠夕的手作工坊｜鉤針作品總整理 @ 緑の庭"
+  },
+];
 
-  var htmlItems = [];
+var htmlItems = [];
 
-  // ─── 比對 1：系列 Router ───
-  seriesConfig.forEach(function(item) {
-    var hasLabel = labels.some(function(l) { return l.name === item.requiredLabel; });
-    var hasKeyword = postTitle.indexOf(item.keyword) !== -1;
+// ─── 比對 1：系列 Router ───
+seriesConfig.forEach(function(item) {
+  var hasLabel = labels.some(function(l) { return l.name === item.requiredLabel; });
+  var hasKeyword = postTitle.indexOf(item.keyword) !== -1;
 
-    if (hasLabel && hasKeyword) {
-      htmlItems.push(
-        "<li>更多" + item.name + "作品&#65306;<a href='" + item.url + "' title='" + item.title + "'>&#12304;" + item.name + "&#12305;</a></li>"
-      );
-    }
-  });
-
-  // ─── 比對 2：分類 Router ───
-  categoryConfig.some(function(item) {
-    var matchedLabel = labels.find(function(l) { return l.name.indexOf(item.targetLabel) !== -1; });
-    if (matchedLabel) {
-      var linkName = item.fixedName || matchedLabel.name;
-      var linkUrl = item.useLabelUrl ? matchedLabel.url : item.fixedUrl;
-      var linkTitle = item.fixedTitle || (item.titlePrefix + matchedLabel.name + " @ 緑の庭");
-      var firstPartText = item.prefix || matchedLabel.name;
-
-      htmlItems.push(
-        "<li>更多" + firstPartText + "&#65306;<a href='" + linkUrl + "' title='" + linkTitle + "'>&#12304;" + linkName + "&#12305;</a></li>"
-      );
-      return true;
-    }
-  });
-
-  // ─── 渲染結果 ───
-  if (htmlItems.length > 0) {
-    listEl.innerHTML = htmlItems.join("");
-    boxEl.style.display = "block";
+  if (hasLabel && hasKeyword) {
+    htmlItems.push(
+      "<li><f-a name='bookmark'></f-a> 更多" + item.name + "作品&#65306;<a href='" + item.url + "' title='" + item.title + "'>&#12304;" + item.name + "&#12305;</a></li>"
+    );
   }
+});
+
+// ─── 比對 2：分類 Router ───
+categoryConfig.some(function(item) {
+  var matchedLabel = labels.find(function(l) { return l.name.indexOf(item.targetLabel) !== -1; });
+  if (matchedLabel) {
+    var linkName = item.fixedName || matchedLabel.name;
+    var linkUrl = item.useLabelUrl ? matchedLabel.url : item.fixedUrl;
+    var linkTitle = item.fixedTitle || (item.titlePrefix + matchedLabel.name + " @ 緑の庭");
+    var firstPartText = item.prefix || matchedLabel.name;
+
+    htmlItems.push(
+      "<li><f-a name='bookmark'></f-a> 更多" + firstPartText + "&#65306;<a href='" + linkUrl + "' title='" + linkTitle + "'>&#12304;" + linkName + "&#12305;</a></li>"
+    );
+    return true;
+  }
+});
+
+// ─── 渲染結果 ───
+if (htmlItems.length > 0) {
+  listEl.innerHTML = htmlItems.join("");
+  boxEl.style.display = "block";
+}
 
   /* =======================================================
    * 功能 2：修正按鈕的無障礙標籤 (aria-label)
