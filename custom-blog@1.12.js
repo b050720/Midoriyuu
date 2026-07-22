@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (hasLabel && hasKeyword) {
       htmlItems.push(
-        "<li class='moreWorks'><f-a name='bookmark'></f-a>更多" + item.name + "作品&#65306;<a href='" + item.url + "' title='" + item.title + "'>&#12304;" + item.name + "&#12305;</a></li>"
+        "<li'><f-a name='bookmark'></f-a>更多" + item.name + "作品&#65306;<a href='" + item.url + "' title='" + item.title + "'>&#12304;" + item.name + "&#12305;</a></li>"
       );
     }
   });
@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function() {
       var firstPartText = item.prefix || matchedLabel.name;
 
       htmlItems.push(
-        "<li class='moreWorks'><f-a name='bookmark'></f-a>更多" + firstPartText + "&#65306;<a href='" + linkUrl + "' title='" + linkTitle + "'>&#12304;" + linkName + "&#12305;</a></li>"
+        "<li'><f-a name='bookmark'></f-a>更多" + firstPartText + "&#65306;<a href='" + linkUrl + "' title='" + linkTitle + "'>&#12304;" + linkName + "&#12305;</a></li>"
       );
       return true;
     }
