@@ -165,5 +165,28 @@ if (htmlItems.length > 0) {
     childList: true,
     subtree: true
   });
+  
+  /* =======================================================
+   * 功能 6：監聽錨點
+   * ======================================================= */
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      // 1. 阻止瀏覽器預設的錨點跳轉（因為預設會新增 history 紀錄）
+      e.preventDefault();
 
+      const targetId = this.getAttribute('href');
+      const targetElement = document.querySelector(targetId);
+
+      if (targetElement) {
+        // 2. 平滑滾動到目標位置
+        targetElement.scrollIntoView({
+          behavior: 'smooth'
+        });
+
+        // 3. 使用 replaceState 更新網址列的 Hash，但不增加歷史紀錄
+        history.replaceState(null, '', targetId);
+      }
+    });
+  });
+  
 }); // <-- 這行就是閉合最頂端：document.addEventListener("DOMContentLoaded", function() {
