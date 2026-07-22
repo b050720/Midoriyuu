@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function() {
     listEl.innerHTML = htmlItems.join("");
     boxEl.style.display = "block"; // 顯示卡片
   }
-});
+
   /* =======================================================
    * 功能 2：修正按鈕的無障礙標籤 (aria-label)
    * ======================================================= */
