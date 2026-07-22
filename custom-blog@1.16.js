@@ -35,32 +35,12 @@ document.addEventListener("DOMContentLoaded", function() {
       url: "https://midoriyuu.blogspot.com/p/craft.html",
       title: "綠夕的手作工坊｜空洞騎士系列作品 @ 緑の庭"
     },
-    {
-      requiredLabel: "製作紀錄",
-      keyword: "魔物獵人",
-      name: "魔物獵人",
-      url: "https://midoriyuu.blogspot.com/p/craft.html",
-      title: "綠夕的手作工坊｜魔物獵人系列作品 @ 緑の庭"
-    },
-    {
-      requiredLabel: "同人",
-      keyword: "魔物獵人",
-      name: "魔物獵人同人小說",
-      url: "https://midoriyuu.blogspot.com/p/craft.html",
-      title: "綠夕的文字創作｜魔物獵人同人系列 @ 緑の庭"
-    }
   ];
 
   // 2. 【大分類 Config】
   var categoryConfig = [
     {
       targetLabel: "原創新詩",
-      prefix: "文字創作",
-      titlePrefix: "綠夕的文字創作｜",
-      useLabelUrl: true
-    },
-    {
-      targetLabel: "原創短篇",
       prefix: "文字創作",
       titlePrefix: "綠夕的文字創作｜",
       useLabelUrl: true
@@ -79,12 +59,6 @@ document.addEventListener("DOMContentLoaded", function() {
       fixedUrl: "https://midoriyuu.blogspot.com/p/craft.html",
       fixedTitle: "綠夕的手作工坊｜鉤針作品總整理 @ 緑の庭"
     },
-    {
-      targetLabel: "歌詞翻譯",
-      prefix: "翻譯作品",
-      titlePrefix: "綠夕的文字創作｜",
-      useLabelUrl: true
-    }
   ];
 
   var htmlItems = [];
