@@ -55,7 +55,7 @@ var categoryConfig = [
   {
     targetLabel: "製作紀錄",
     prefix: "鉤針作品",
-    fixedName: "全部作品",
+    fixedName: "綠夕的手作工坊",
     fixedUrl: "https://midoriyuu.blogspot.com/p/craft.html",
     fixedTitle: "綠夕的手作工坊｜鉤針作品總整理 @ 緑の庭"
   },
