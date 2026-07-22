@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
 /* =======================================================
  * 功能 1：處理更多作品標籤文字（支援多標籤比對）
  * ======================================================= */
-  var boxEl = document.getElementById("moreWorksBox");
+  var boxEl = document.getElementById("moreWorks");
   var listEl = document.getElementById("moreWorksList");
   var labelNodes = document.querySelectorAll("#postLabelsData .label-item");
   if (!boxEl || !listEl || labelNodes.length === 0) return;
