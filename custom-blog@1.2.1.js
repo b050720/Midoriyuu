@@ -25,14 +25,14 @@ var seriesConfig = [
     requiredLabel: "製作紀錄",
     keyword: "英雄聯盟",
     name: "英雄聯盟",
-    url: "https://midoriyuu.blogspot.com/p/craft.html",
+    url: "https://midoriyuu.blogspot.com/search/label/%E8%8B%B1%E9%9B%84%E8%81%AF%E7%9B%9F",
     title: "綠夕的手作工坊｜英雄聯盟系列作品 @ 緑の庭"
   },
   {
     requiredLabel: "製作紀錄",
     keyword: "空洞騎士",
     name: "空洞騎士",
-    url: "https://midoriyuu.blogspot.com/p/craft.html",
+    url: "https://midoriyuu.blogspot.com/search/label/%E7%A9%BA%E6%B4%9E%E9%A8%8E%E5%A3%AB",
     title: "綠夕的手作工坊｜空洞騎士系列作品 @ 緑の庭"
   },
 ];
@@ -49,7 +49,7 @@ var categoryConfig = [
     targetLabel: "充滿時尚品味的",
     prefix: "瑪奇日常",
     fixedName: "充滿時尚品味的",
-    fixedUrl: "https://midoriyuu.blogspot.com/p/craft.html",
+    fixedUrl: "https://midoriyuu.blogspot.com/p/mabinogi.html",
     fixedTitle: "綠夕的瑪奇服裝收集冊 @ 緑の庭"
   },
   {
