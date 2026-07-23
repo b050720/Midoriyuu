@@ -4,7 +4,7 @@
 document.addEventListener("DOMContentLoaded", function() {
   
 /* =======================================================
- * 功能 1：處理更多作品標籤文字（支援多標籤比對）
+ * 功能 1：處理更多作品標籤文字
  * ======================================================= */
 var boxEl = document.getElementById("moreWorks");
 var listEl = document.getElementById("moreWorksList");
@@ -98,13 +98,13 @@ if (htmlItems.length > 0) {
 }
 
   /* =======================================================
-   * 功能 2：修正按鈕的無障礙標籤 (aria-label)
+   * 功能 2：修正按鈕的無障礙標籤
    * ======================================================= */
   document.querySelector('.back-button')?.setAttribute('aria-label', '返回首頁');
   document.querySelector('.sidebar-back')?.setAttribute('aria-label', '關閉側邊欄');
 
   /* =======================================================
-   * 功能 3：回到頂端功能 (原生 JS版)
+   * 功能 3：回到頂端功能
    * ======================================================= */
   var imgUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh3FWDPR2RQAqQGt9umu0yhATNQDoESwxiGIXz6ocT6hopC9NhxRksna7oz6axJPgIFx4IvtKWIncy575PgtsVld7L5thQ1xCB8hgIL5hme03PfqKTQX58erzZkonp0SEGE4DYtwDt1rA/w40-rw/gotop.png";
   
@@ -133,6 +133,84 @@ if (htmlItems.length > 0) {
     }
   });
 
+  /* =======================================================
+   * 功能 4：文章目錄 TOC
+   * ======================================================= */
+// 1. 定義 TOC 函式
+function mbtTOC() {
+  var container = document.querySelector(".mbtTOC");
+  var tocList = document.getElementById("mbtTOC");
+  var tocTitles = document.querySelectorAll(".TOCtitle");
+  var targetTitle = tocTitles.length > 0 ? tocTitles[tocTitles.length - 1] : container;
+
+  var postBody = document.querySelector(".post-body") || document.body;
+  var headers = postBody.querySelectorAll("h2:not(.TOCtitle), h3:not(.TOCtitle)");
+  if (headers.length === 0 || !tocList) return;
+
+  var baseFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+  var offsetPx = 5 * baseFontSize; 
+  var currentH2List = null;
+
+  function scrollToTarget(targetElement) {
+    if (!targetElement) return;
+    var elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+    window.scrollTo({
+      top: elementPosition - offsetPx,
+      behavior: "smooth"
+    });
+  }
+
+  headers.forEach(function(header, i) {
+    header.setAttribute("id", "point" + i);
+    header.title = "點擊返回文章目錄";
+
+    header.addEventListener("click", function() {
+      scrollToTarget(targetTitle);
+    });
+
+    var li = document.createElement("li");
+    var a = document.createElement("a");
+    
+    a.href = "javascript:void(0);";
+    a.textContent = header.textContent;
+    
+    a.addEventListener("click", function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      scrollToTarget(header);
+    });
+
+    li.appendChild(a);
+
+    var tagName = header.tagName.toLowerCase();
+
+    if (tagName === "h2") {
+      tocList.appendChild(li);
+      currentH2List = null;
+    } else if (tagName === "h3") {
+      if (!currentH2List) {
+        currentH2List = document.createElement("ol");
+        currentH2List.className = "toc-sub-list";
+        var lastLi = tocList.lastElementChild;
+        (lastLi || tocList).appendChild(currentH2List);
+      }
+      currentH2List.appendChild(li);
+    }
+  });
+}
+
+// 2. 切換展開/收合的函式（放在外面供 HTML click 事件呼叫）
+function mbtToggle() {
+  var mbt = document.getElementById('mbtTOC');
+  if (mbt) {
+    mbt.style.display = (mbt.style.display === 'none') ? 'block' : 'none';
+  }
+}
+
+// 3. 確保網頁結構載入完畢後，自動觸發生成目錄
+document.addEventListener("DOMContentLoaded", function() {
+  mbtTOC();
+  
   /* =======================================================
    * 功能 5：監聽留言區並修改 title 屬性
    * ======================================================= */
