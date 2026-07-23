@@ -134,24 +134,6 @@ if (htmlItems.length > 0) {
   });
 
   /* =======================================================
-   * 功能 4：Fancybox 燈箱觸發設定
-   * ======================================================= */
-  Fancybox.bind('[data-fancybox]', {
-    Carousel: {
-      breakpoints: {
-        "(max-width: 800px)": { Arrows: false }
-      },
-      Toolbar: {
-        display: {
-          left: [""],
-          middle: ["counter"],
-          right: ["autoplay", "thumbs", "close"],
-        },
-      },
-    },
-  });
- 
-  /* =======================================================
    * 功能 5：監聽留言區並修改 title 屬性
    * ======================================================= */
   var observer = new MutationObserver(function(mutations, obs) {
