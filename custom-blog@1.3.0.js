@@ -135,7 +135,7 @@ function initPostFeatures() {
       var hasLabel = labels.some(function(l) { return l.name === item.requiredLabel; });
       var hasKeyword = postTitle.indexOf(item.keyword) !== -1;
       if (hasLabel && hasKeyword) {
-        htmlItems.push("<p><span class="fa" data-icon="bookmark"></span>更多" + item.name + "作品&#65306;<a href='" + item.url + "' title='" + item.title + "'>&#12304;" + item.name + "&#12305;</a></p>");
+        htmlItems.push("<p><span class='fa' data-icon='bookmark'></span>更多" + item.name + "作品&#65306;<a href='" + item.url + "' title='" + item.title + "'>&#12304;" + item.name + "&#12305;</a></p>");
       }
     });
 
@@ -147,7 +147,7 @@ function initPostFeatures() {
         var linkTitle = item.fixedTitle || (item.titlePrefix + matchedLabel.name + " @ 緑の庭");
         var firstPartText = item.prefix || matchedLabel.name;
 
-        htmlItems.push("<p><span class="fa" data-icon="bookmark"></span>更多" + firstPartText + "&#65306;<a href='" + linkUrl + "' title='" + linkTitle + "'>&#12304;" + linkName + "&#12305;</a></p>");
+        htmlItems.push("<p><span class='fa' data-icon='bookmark'></span>更多" + firstPartText + "&#65306;<a href='" + linkUrl + "' title='" + linkTitle + "'>&#12304;" + linkName + "&#12305;</a></p>");
         return true;
       }
     });
