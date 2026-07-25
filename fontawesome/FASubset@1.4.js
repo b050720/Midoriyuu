@@ -77,8 +77,6 @@ function createSVG(viewBox, path) {
   svg.setAttribute("viewBox", viewBox);
   svg.setAttribute("width", "100%");
   svg.setAttribute("height", "100%");
-  
-  // 關鍵屬性：告知螢幕閱讀器與閱讀模式忽略此圖示，且不可聚焦
   svg.setAttribute("aria-hidden", "true");
   svg.setAttribute("focusable", "false");
 
@@ -88,46 +86,26 @@ function createSVG(viewBox, path) {
   return svg;
 }
 
-// 渲染單一圖示
-function renderIcon(element) {
-  const name = element.dataset.icon || "bookmark";
-  if (!iconList[name]) return;
+// 掃描頁面並一次性渲染所有 .fa 元素
+function initIcons() {
+  const icons = document.querySelectorAll('.fa[data-icon]');
+  
+  icons.forEach(el => {
+    const name = el.dataset.icon || "bookmark";
+    if (!iconList[name]) return;
 
-  if (!iconCache.has(name)) {
-    const { viewBox, path } = iconList[name];
-    iconCache.set(name, createSVG(viewBox, path));
-  }
+    if (!iconCache.has(name)) {
+      const { viewBox, path } = iconList[name];
+      iconCache.set(name, createSVG(viewBox, path));
+    }
 
-  // 避免重複插入相同 SVG
-  element.replaceChildren(iconCache.get(name).cloneNode(true));
+    el.replaceChildren(iconCache.get(name).cloneNode(true));
+  });
 }
 
-// 掃描頁面上所有的 .fa 元素
-function initIcons(root = document) {
-  const icons = root.querySelectorAll('.fa[data-icon]');
-  icons.forEach(renderIcon);
-}
-
-// DOM 載入後執行
+// DOM 載入完畢後執行一次即可
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => initIcons());
+  document.addEventListener('DOMContentLoaded', initIcons);
 } else {
   initIcons();
 }
-
-// (可選) 監聽動態新增的 .fa 元素
-const observer = new MutationObserver((mutations) => {
-  for (const mutation of mutations) {
-    for (const node of mutation.addedNodes) {
-      if (node.nodeType === 1) { // Node.ELEMENT_NODE
-        if (node.matches('.fa[data-icon]')) {
-          renderIcon(node);
-        } else {
-          initIcons(node);
-        }
-      }
-    }
-  }
-});
-
-observer.observe(document.body, { childList: true, subtree: true });
