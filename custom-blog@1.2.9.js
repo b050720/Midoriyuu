@@ -135,7 +135,7 @@ function initPostFeatures() {
       var hasLabel = labels.some(function(l) { return l.name === item.requiredLabel; });
       var hasKeyword = postTitle.indexOf(item.keyword) !== -1;
       if (hasLabel && hasKeyword) {
-        htmlItems.push("<p><f-a name='bookmark'></f-a>更多" + item.name + "作品&#65306;<a href='" + item.url + "' title='" + item.title + "'>&#12304;" + item.name + "&#12305;</a></p>");
+        htmlItems.push("<p><span class="fa" data-icon="bookmark"></span>更多" + item.name + "作品&#65306;<a href='" + item.url + "' title='" + item.title + "'>&#12304;" + item.name + "&#12305;</a></p>");
       }
     });
 
@@ -147,7 +147,7 @@ function initPostFeatures() {
         var linkTitle = item.fixedTitle || (item.titlePrefix + matchedLabel.name + " @ 緑の庭");
         var firstPartText = item.prefix || matchedLabel.name;
 
-        htmlItems.push("<p><f-a name='bookmark'></f-a>更多" + firstPartText + "&#65306;<a href='" + linkUrl + "' title='" + linkTitle + "'>&#12304;" + linkName + "&#12305;</a></p>");
+        htmlItems.push("<p><span class="fa" data-icon="bookmark"></span>更多" + firstPartText + "&#65306;<a href='" + linkUrl + "' title='" + linkTitle + "'>&#12304;" + linkName + "&#12305;</a></p>");
         return true;
       }
     });
@@ -157,12 +157,6 @@ function initPostFeatures() {
       boxEl.style.display = "block";
     }
   }
-
-  /* -------------------------------------------------------
-   * 功能 2：修正按鈕無障礙標籤
-   * ------------------------------------------------------- */
-  document.querySelector('.back-button')?.setAttribute('aria-label', '返回首頁');
-  document.querySelector('.sidebar-back')?.setAttribute('aria-label', '關閉側邊欄');
 
   /* -------------------------------------------------------
    * 功能 3：執行 TOC 文章目錄
