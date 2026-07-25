@@ -78,7 +78,6 @@ function createSVG(viewBox, path) {
     svg.setAttribute("width", "100%");
     svg.setAttribute("height", "100%");
     svg.setAttribute("aria-hidden", "true");
-    svg.setAttribute("focusable", "false");
 
     const p = document.createElementNS(svgNS, "path");
     p.setAttribute("d", path);
