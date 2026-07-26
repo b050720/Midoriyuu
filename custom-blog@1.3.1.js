@@ -2,12 +2,19 @@
  * 綠夕的工坊 - 文章與頁面專用客製化功能
  */
 
-// 切換 TOC 展開/收合
+// 切換 TOC 展開/收合 (搭配 CSS 動畫)
 window.mbtToggle = function() {
   var mbt = document.getElementById('mbtTOC');
+  var btn = document.querySelector('.toc-toggle-btn');
+
   if (mbt) {
-    var isHidden = mbt.style.display === 'none' || getComputedStyle(mbt).display === 'none';
-    mbt.style.display = isHidden ? 'block' : 'none';
+    // 透過切換 is-closed 類別觸發 CSS Transition 動畫
+    mbt.classList.toggle('is-closed');
+    
+    // 如果有切換按鈕，順便切換按鈕旋轉狀態
+    if (btn) {
+      btn.classList.toggle('is-closed');
+    }
   }
 };
 
