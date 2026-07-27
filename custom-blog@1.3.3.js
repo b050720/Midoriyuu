@@ -155,6 +155,32 @@ function initPostFeatures() {
   }
 
   /* -------------------------------------------------------
+   * 功能 2：自動包裹 H2 內容區塊為 <section class="cv">
+   * ------------------------------------------------------- */
+  var postBody = document.querySelector(".post-body");
+  if (postBody) {
+    var h2List = postBody.querySelectorAll("h2:not(.TOCtitle)");
+    h2List.forEach(function(h2) {
+      var section = document.createElement("section");
+      section.className = "cv";
+      
+      var nextNode = h2.nextSibling;
+      while (nextNode) {
+        var currentNode = nextNode;
+        nextNode = nextNode.nextSibling;
+        
+        // 遇到下一個 H2 (排除 TOCtitle) 則停止包裹
+        if (currentNode.nodeType === 1 && currentNode.tagName.toLowerCase() === "h2") {
+          break;
+        }
+        section.appendChild(currentNode);
+      }
+      // 將 section 插在當前 h2 之後
+      h2.parentNode.insertBefore(section, h2.nextSibling);
+    });
+  }
+
+  /* -------------------------------------------------------
    * 功能 3：執行 TOC 文章目錄
    * ------------------------------------------------------- */
   if (typeof window.mbtTOC === "function") {
