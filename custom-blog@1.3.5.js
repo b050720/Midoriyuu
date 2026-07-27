@@ -153,43 +153,45 @@ function initPostFeatures() {
   }
 
   /* -------------------------------------------------------
-   * 功能 2：自動包裹 H2 內容區塊並加上 ResizeObserver 動態量測高度
+   * 功能 2：自動包裹 H2 內容區塊，並使用 rAF 測量一次性真實高度
    * ------------------------------------------------------- */
   const postBody = document.querySelector(".post-body");
   if (postBody) {
-    // 建立 ResizeObserver 實例
-    const cvObserver = new ResizeObserver(entries => {
-      for (const entry of entries) {
-        const height = entry.borderBoxSize?.[0]?.blockSize ?? entry.target.offsetHeight;
-        // 當確定抓到渲染高度時，動態更新 CSS 變數
-        if (height > 0) {
-          entry.target.style.setProperty('--rendered-height', `${height}px`);
-        }
-      }
-    });
-
+    const sections = [];
     const h2List = Array.from(postBody.querySelectorAll("h2:not(.TOCtitle)"));
+
     h2List.forEach(h2 => {
       const section = document.createElement("section");
       section.className = "cv";
       
-      // 將 H2 及其內容都放入 section（修正語意結構）
+      // 將 H2 及其內容都放入 section（維持正確語意）
       h2.parentNode.insertBefore(section, h2);
       section.appendChild(h2);
       
       let nextNode = section.nextSibling;
-      while (nextNode) {
+      // 限定只包到 postBody 的第一層子元素，防止吃掉外層 footer 等非文章內容節點
+      while (nextNode && nextNode.parentNode === postBody) {
         const currentNode = nextNode;
         nextNode = nextNode.nextSibling;
         
-        if (currentNode.nodeType === 1 && currentNode.tagName.toLowerCase() === "h2") {
+        // 使用 matches 避開非文章的主標題，遇下一個 h2 停止
+        if (currentNode.nodeType === 1 && currentNode.matches("h2:not(.TOCtitle)")) {
           break;
         }
         section.appendChild(currentNode);
       }
 
-      // 開始監聽這個動態生成的 section
-      cvObserver.observe(section);
+      sections.push(section);
+    });
+
+    // 在下一繪製幀量測真實高度，寫入 CSS 變數（完全不需要 ResizeObserver）
+    requestAnimationFrame(() => {
+      sections.forEach(sec => {
+        const h = sec.offsetHeight;
+        if (h > 0) {
+          sec.style.setProperty("--rendered-height", `${h}px`);
+        }
+      });
     });
   }
 
