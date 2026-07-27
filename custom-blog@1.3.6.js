@@ -21,7 +21,7 @@ window.mbtTOC = function() {
 
   tocList.innerHTML = "";
   const baseFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-  const offsetPx = 5 * baseFontSize; 
+  const offsetPx = 5.5 * baseFontSize; 
   let currentH2List = null;
 
   function scrollToTarget(targetElement) {
