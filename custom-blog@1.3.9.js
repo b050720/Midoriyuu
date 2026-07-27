@@ -2,10 +2,10 @@
  * 全局設定與工具函數
  * ======================================================= */
 
-// 計算預設捲動 offset (5rem)
+// 計算預設捲動 offset
 function getHeaderOffset() {
   var baseFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-  return 5 * baseFontSize;
+  return 6 * baseFontSize;
 }
 
 // 統一的平滑捲動函數
