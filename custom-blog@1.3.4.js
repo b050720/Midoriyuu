@@ -1,50 +1,50 @@
 // 切換 TOC 展開/收合
 window.mbtToggle = function() {
-  var mbt = document.getElementById('mbtTOC');
+  const mbt = document.getElementById('mbtTOC');
   if (mbt) {
-    var isHidden = mbt.style.display === 'none' || getComputedStyle(mbt).display === 'none';
+    const isHidden = mbt.style.display === 'none' || getComputedStyle(mbt).display === 'none';
     mbt.style.display = isHidden ? 'block' : 'none';
   }
 };
 
 // 生成 TOC 文章目錄
 window.mbtTOC = function() {
-  var container = document.querySelector(".mbtTOC");
-  var tocList = document.getElementById("mbtTOC");
+  const container = document.querySelector(".mbtTOC");
+  const tocList = document.getElementById("mbtTOC");
   if (!container || !tocList) return;
 
-  var tocTitles = document.querySelectorAll(".TOCtitle");
-  var targetTitle = tocTitles.length > 0 ? tocTitles[tocTitles.length - 1] : container;
-  var postBody = document.querySelector(".post-body") || document.body;
-  var headers = postBody.querySelectorAll("h2:not(.TOCtitle), h3:not(.TOCtitle)");
+  const tocTitles = document.querySelectorAll(".TOCtitle");
+  const targetTitle = tocTitles.length > 0 ? tocTitles[tocTitles.length - 1] : container;
+  const postBody = document.querySelector(".post-body") || document.body;
+  const headers = postBody.querySelectorAll("h2:not(.TOCtitle), h3:not(.TOCtitle)");
   if (headers.length === 0) return;
 
   tocList.innerHTML = "";
-  var baseFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-  var offsetPx = 5 * baseFontSize; 
-  var currentH2List = null;
+  const baseFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+  const offsetPx = 5 * baseFontSize; 
+  let currentH2List = null;
 
   function scrollToTarget(targetElement) {
     if (!targetElement) return;
-    var elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+    const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
     window.scrollTo({
       top: elementPosition - offsetPx,
       behavior: "smooth"
     });
   }
 
-  headers.forEach(function(header, i) {
+  headers.forEach((header, i) => {
     header.setAttribute("id", "point" + i);
     header.title = "點擊返回文章目錄";
 
-    header.addEventListener("click", function() { scrollToTarget(targetTitle); });
+    header.addEventListener("click", () => scrollToTarget(targetTitle));
 
-    var li = document.createElement("li");
-    var a = document.createElement("a");
+    const li = document.createElement("li");
+    const a = document.createElement("a");
     a.href = "#point" + i;
     a.textContent = header.textContent;
     
-    a.addEventListener("click", function(e) {
+    a.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
       scrollToTarget(header);
@@ -52,7 +52,7 @@ window.mbtTOC = function() {
 
     li.appendChild(a);
 
-    var tagName = header.tagName.toLowerCase();
+    const tagName = header.tagName.toLowerCase();
     if (tagName === "h2") {
       tocList.appendChild(li);
       currentH2List = null;
@@ -60,7 +60,7 @@ window.mbtTOC = function() {
       if (!currentH2List) {
         currentH2List = document.createElement("ol");
         currentH2List.className = "toc-sub-list";
-        var lastLi = tocList.lastElementChild;
+        const lastLi = tocList.lastElementChild;
         (lastLi || tocList).appendChild(currentH2List);
       }
       currentH2List.appendChild(li);
@@ -72,20 +72,18 @@ function initPostFeatures() {
   /* -------------------------------------------------------
    * 功能 1：處理更多作品標籤文字
    * ------------------------------------------------------- */
-  var boxEl = document.getElementById("moreWorks");
-  var listEl = document.getElementById("moreWorksList");
-  var labelNodes = document.querySelectorAll("#postLabelsData .label-item");
+  const boxEl = document.getElementById("moreWorks");
+  const listEl = document.getElementById("moreWorksList");
+  const labelNodes = document.querySelectorAll("#postLabelsData .label-item");
 
   if (boxEl && listEl && labelNodes.length > 0) {
-    var postTitle = boxEl.getAttribute("data-title") || "";
-    var labels = Array.from(labelNodes).map(function(node) {
-      return {
-        name: node.getAttribute("data-name") || "",
-        url: node.getAttribute("data-url") || ""
-      };
-    });
+    const postTitle = boxEl.getAttribute("data-title") || "";
+    const labels = Array.from(labelNodes).map(node => ({
+      name: node.getAttribute("data-name") || "",
+      url: node.getAttribute("data-url") || ""
+    }));
 
-    var seriesConfig = [
+    const seriesConfig = [
       {
         requiredLabel: "製作紀錄",
         keyword: "英雄聯盟",
@@ -102,7 +100,7 @@ function initPostFeatures() {
       }
     ];
 
-    var categoryConfig = [
+    const categoryConfig = [
       {
         targetLabel: "原創新詩",
         prefix: "文字創作",
@@ -125,25 +123,25 @@ function initPostFeatures() {
       }
     ];
 
-    var htmlItems = [];
+    const htmlItems = [];
 
-    seriesConfig.forEach(function(item) {
-      var hasLabel = labels.some(function(l) { return l.name === item.requiredLabel; });
-      var hasKeyword = postTitle.indexOf(item.keyword) !== -1;
+    seriesConfig.forEach(item => {
+      const hasLabel = labels.some(l => l.name === item.requiredLabel);
+      const hasKeyword = postTitle.includes(item.keyword);
       if (hasLabel && hasKeyword) {
-        htmlItems.push("<p><span class='fa' data-icon='bookmark'></span>更多" + item.name + "作品&#65306;<a href='" + item.url + "' title='" + item.title + "'>&#12304;" + item.name + "&#12305;</a></p>");
+        htmlItems.push(`<p><span class='fa' data-icon='bookmark'></span>更多${item.name}作品&#65306;<a href='${item.url}' title='${item.title}'>&#12304;${item.name}&#12305;</a></p>`);
       }
     });
 
-    categoryConfig.some(function(item) {
-      var matchedLabel = labels.find(function(l) { return l.name.indexOf(item.targetLabel) !== -1; });
+    categoryConfig.some(item => {
+      const matchedLabel = labels.find(l => l.name.includes(item.targetLabel));
       if (matchedLabel) {
-        var linkName = item.fixedName || matchedLabel.name;
-        var linkUrl = item.useLabelUrl ? matchedLabel.url : item.fixedUrl;
-        var linkTitle = item.fixedTitle || (item.titlePrefix + matchedLabel.name + " @ 緑の庭");
-        var firstPartText = item.prefix || matchedLabel.name;
+        const linkName = item.fixedName || matchedLabel.name;
+        const linkUrl = item.useLabelUrl ? matchedLabel.url : item.fixedUrl;
+        const linkTitle = item.fixedTitle || `${item.titlePrefix}${matchedLabel.name} @ 緑の庭`;
+        const firstPartText = item.prefix || matchedLabel.name;
 
-        htmlItems.push("<p><span class='fa' data-icon='bookmark'></span>更多" + firstPartText + "&#65306;<a href='" + linkUrl + "' title='" + linkTitle + "'>&#12304;" + linkName + "&#12305;</a></p>");
+        htmlItems.push(`<p><span class='fa' data-icon='bookmark'></span>更多${firstPartText}&#65306;<a href='${linkUrl}' title='${linkTitle}'>&#12304;${linkName}&#12305;</a></p>`);
         return true;
       }
     });
@@ -155,28 +153,43 @@ function initPostFeatures() {
   }
 
   /* -------------------------------------------------------
-   * 功能 2：自動包裹 H2 內容區塊為 <section class="cv">
+   * 功能 2：自動包裹 H2 內容區塊並加上 ResizeObserver 動態量測高度
    * ------------------------------------------------------- */
-  var postBody = document.querySelector(".post-body");
+  const postBody = document.querySelector(".post-body");
   if (postBody) {
-    var h2List = postBody.querySelectorAll("h2:not(.TOCtitle)");
-    h2List.forEach(function(h2) {
-      var section = document.createElement("section");
+    // 建立 ResizeObserver 實例
+    const cvObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        const height = entry.borderBoxSize?.[0]?.blockSize ?? entry.target.offsetHeight;
+        // 當確定抓到渲染高度時，動態更新 CSS 變數
+        if (height > 0) {
+          entry.target.style.setProperty('--rendered-height', `${height}px`);
+        }
+      }
+    });
+
+    const h2List = Array.from(postBody.querySelectorAll("h2:not(.TOCtitle)"));
+    h2List.forEach(h2 => {
+      const section = document.createElement("section");
       section.className = "cv";
       
-      var nextNode = h2.nextSibling;
+      // 將 H2 及其內容都放入 section（修正語意結構）
+      h2.parentNode.insertBefore(section, h2);
+      section.appendChild(h2);
+      
+      let nextNode = section.nextSibling;
       while (nextNode) {
-        var currentNode = nextNode;
+        const currentNode = nextNode;
         nextNode = nextNode.nextSibling;
         
-        // 遇到下一個 H2 (排除 TOCtitle) 則停止包裹
         if (currentNode.nodeType === 1 && currentNode.tagName.toLowerCase() === "h2") {
           break;
         }
         section.appendChild(currentNode);
       }
-      // 將 section 插在當前 h2 之後
-      h2.parentNode.insertBefore(section, h2.nextSibling);
+
+      // 開始監聽這個動態生成的 section
+      cvObserver.observe(section);
     });
   }
 
@@ -188,10 +201,10 @@ function initPostFeatures() {
   }
 
   /* -------------------------------------------------------
-   * 功能 4：監聽留言區 title 屬性
+   * 功能 4：監聽留言區 title 屬性 (帶 Timeout 防止無限監聽)
    * ------------------------------------------------------- */
-  var observer = new MutationObserver(function(mutations, obs) {
-    var commentLink = document.querySelector("#comments .footer a[onclick*='bloggerPopup']");
+  const observer = new MutationObserver((mutations, obs) => {
+    const commentLink = document.querySelector("#comments .footer a[onclick*='bloggerPopup']");
     if (commentLink) {
       commentLink.setAttribute("title", "歡迎留言(*´∀`)~♥");
       obs.disconnect(); 
@@ -199,6 +212,7 @@ function initPostFeatures() {
   });
   if (document.body) {
     observer.observe(document.body, { childList: true, subtree: true });
+    setTimeout(() => observer.disconnect(), 10000);
   }
 }
 
