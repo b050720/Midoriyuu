@@ -107,12 +107,11 @@ function initPostFeatures() {
   /* -------------------------------------------------------
    * 功能 1：處理更多作品標籤文字
    * ------------------------------------------------------- */
-  var boxEl = document.getElementById("moreWorks");
   var listEl = document.getElementById("moreWorksList");
   var labelNodes = document.querySelectorAll("#postLabelsData .label-item");
 
-  if (boxEl && listEl && labelNodes.length > 0) {
-    var postTitle = boxEl.getAttribute("data-title") || "";
+  if (listEl && labelNodes.length > 0) {
+    var postTitle = listEl.getAttribute("data-title") || "";
     var labels = Array.from(labelNodes).map(function(node) {
       return {
         name: node.getAttribute("data-name") || "",
@@ -178,7 +177,6 @@ function initPostFeatures() {
 
     // 處理分類設定
     categoryConfig.some(function(item) {
-      // 支援模糊比對 targetLabel
       var matchedLabel = null;
       for (var entry of labelMap.entries()) {
         if (entry[0].indexOf(item.targetLabel) !== -1) {
@@ -198,9 +196,10 @@ function initPostFeatures() {
       }
     });
 
+    // 3. 有內容時直接更新並顯示 listEl 即可
     if (htmlItems.length > 0) {
       listEl.innerHTML = htmlItems.join("");
-      boxEl.style.display = "block";
+      listEl.style.display = "block";
     }
   }
 
