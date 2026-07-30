@@ -107,7 +107,7 @@ function initPostFeatures() {
   /* -------------------------------------------------------
    * 功能 1：處理更多作品標籤文字
    * ------------------------------------------------------- */
-  var listEl = document.getElementById("moreWorksList");
+  var listEl = document.getElementById("moreWorks");
   var labelNodes = document.querySelectorAll("#postLabelsData .label-item");
 
   if (listEl && labelNodes.length > 0) {
