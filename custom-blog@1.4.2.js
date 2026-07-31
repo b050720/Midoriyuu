@@ -4,8 +4,9 @@
 
 // 計算預設捲動 offset
 function getHeaderOffset() {
-  var baseFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-  return 6 * baseFontSize;
+  // 替換為你的 Header 選擇器，例如 '#header' 或 '.navbar'
+  var header = document.querySelector('header'); 
+  return header ? header.offsetHeight : 0;
 }
 
 // 統一的平滑捲動函數
