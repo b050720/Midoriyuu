@@ -6,7 +6,7 @@
 function getHeaderOffset() {
   var header = document.querySelector('header');
   var headerHeight = header ? header.offsetHeight : 0;
-  var buffer = 32; // 額外的視覺緩衝距離 (px)
+  var buffer = 16; // 額外的視覺緩衝距離 (px)
   return headerHeight + buffer;
 }
 
