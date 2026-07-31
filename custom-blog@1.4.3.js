@@ -4,9 +4,10 @@
 
 // 計算預設捲動 offset
 function getHeaderOffset() {
-  // 替換為你的 Header 選擇器，例如 '#header' 或 '.navbar'
-  var header = document.querySelector('header'); 
-  return header ? header.offsetHeight : 0;
+  var header = document.querySelector('header');
+  var headerHeight = header ? header.offsetHeight : 0;
+  var buffer = 32; // 額外的視覺緩衝距離 (px)
+  return headerHeight + buffer;
 }
 
 // 統一的平滑捲動函數
