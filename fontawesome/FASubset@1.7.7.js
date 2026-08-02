@@ -143,4 +143,8 @@ function initIcons() {
 }
 
 // DOM 載入完畢後執行一次即可
-initIcons();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initIcons);
+} else {
+  initIcons();
+}
