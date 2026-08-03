@@ -132,14 +132,14 @@ function initPostFeatures() {
         keyword: "英雄聯盟",
         name: "英雄聯盟",
         url: "https://midoriyuu.blogspot.com/search/label/%E8%8B%B1%E9%9B%84%E8%81%AF%E7%9B%9F",
-        title: "綠夕的手作工坊｜英雄聯盟系列作品 @ 緑の庭"
+        title: "綠夕的手作工坊｜英雄聯盟系列作品 - Midoriyuu"
       },
       {
         requiredLabel: "製作紀錄",
         keyword: "空洞騎士",
         name: "空洞騎士",
         url: "https://midoriyuu.blogspot.com/search/label/%E7%A9%BA%E6%B4%9E%E9%A8%8E%E5%A3%AB",
-        title: "綠夕的手作工坊｜空洞騎士系列作品 @ 緑の庭"
+        title: "綠夕的手作工坊｜空洞騎士系列作品 - Midoriyuu"
       }
     ];
 
@@ -155,14 +155,14 @@ function initPostFeatures() {
         prefix: "瑪奇日常",
         fixedName: "充滿時尚品味的",
         fixedUrl: "https://midoriyuu.blogspot.com/p/mabinogi.html",
-        fixedTitle: "綠夕的瑪奇服裝收集冊 @ 緑の庭"
+        fixedTitle: "綠夕的瑪奇服裝收集冊 - Midoriyuu"
       },
       {
         targetLabel: "製作紀錄",
         prefix: "鉤針作品",
         fixedName: "綠夕的手作工坊",
         fixedUrl: "https://midoriyuu.blogspot.com/p/craft.html",
-        fixedTitle: "綠夕的手作工坊｜鉤針作品總整理 @ 緑の庭"
+        fixedTitle: "綠夕的手作工坊｜鉤針作品總整理 - Midoriyuu"
       }
     ];
 
@@ -190,7 +190,7 @@ function initPostFeatures() {
       if (matchedLabel) {
         var linkName = item.fixedName || matchedLabel.name;
         var linkUrl = item.useLabelUrl ? matchedLabel.url : item.fixedUrl;
-        var linkTitle = item.fixedTitle || (item.titlePrefix + matchedLabel.name + " @ 緑の庭");
+        var linkTitle = item.fixedTitle || (item.titlePrefix + matchedLabel.name + " - Midoriyuu");
         var firstPartText = item.prefix || matchedLabel.name;
 
         htmlItems.push("<p><span class='fa' data-icon='bookmark'></span>更多" + firstPartText + "&#65306;<a href='" + linkUrl + "' title='" + linkTitle + "'>&#12304;" + linkName + "&#12305;</a></p>");
@@ -211,22 +211,6 @@ function initPostFeatures() {
   if (typeof window.mbtTOC === "function") {
     window.mbtTOC();
   }
-
-  /* -------------------------------------------------------
-   * 功能 3：監聽留言區 title 屬性
-   * ------------------------------------------------------- */
-  var commentsContainer = document.getElementById("comments");
-  var targetTarget = commentsContainer || document.body;
-
-  var observer = new MutationObserver(function(mutations, obs) {
-    var commentLink = document.querySelector("#comments .footer a[onclick*='bloggerPopup']");
-    if (commentLink) {
-      commentLink.setAttribute("title", "歡迎留言(*´∀`)~♥");
-      obs.disconnect(); 
-    }
-  });
-
-  observer.observe(targetTarget, { childList: true, subtree: true });
 }
 
 // 腳本啟動器
